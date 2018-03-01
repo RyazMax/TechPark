@@ -1,20 +1,19 @@
 #define _POSIX_C_SOURCE 
 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
-#include <string.h>
-#include <stddef.h>
-
-
 
 
 #define IN_DIG 1
 #define BEFORE_DIG -1
 #define AFTER_DIG 0
 
+
 typedef unsigned long long ull_t;
 const ull_t PREV_MAX_VAL = (ull_t)1e+18;
+
 
 ull_t get_digit()
 {
