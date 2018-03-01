@@ -1,4 +1,4 @@
-#define _POSIX_C_SOURCE 
+#define _GNU_SOURCE
 
 
 #include <stdio.h>
@@ -142,4 +142,3 @@ int main()
 	free(result);	
 	return 0;
 }
-
