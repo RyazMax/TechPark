@@ -6,15 +6,25 @@
 #include <limits.h>
 
 
-#define IN_DIG 1
-#define BEFORE_DIG -1
-#define AFTER_DIG 0
+/* 
+ * Определение простых множителей натурального числа.
+ * Чтение числа происходит из стандартного входа.
+ * При некорректных данных выводится [error].
+ */
+
+
+// Флаги состояния при чтении числа
+#define IN_DIG 1 // Внутри числа
+#define BEFORE_DIG -1 // Не дошли до числа 
+#define AFTER_DIG 0 // Вышли из числа
 
 
 typedef unsigned long long ull_t;
 const ull_t PREV_MAX_VAL = (ull_t)1e+18;
 
 
+// Чтение числа из стандартного входа.
+// Возвращает 0, если входные данные не корректны.
 ull_t get_digit()
 {
 	char* line = NULL;
@@ -42,21 +52,22 @@ ull_t get_digit()
 			free(line);
 			return 0;
 		}
+
 		if (*i >= '0' && *i <='9' && state)
 		{ 
-			if (res < (ull_t)PREV_MAX_VAL)
-				res = res*10 + *i-'0';
-			else
+			if (res > (ull_t)PREV_MAX_VAL)
 			{
 				free(line);
 				return 0;
 			}
+
+			res = res*10 + *i-'0';
 			state = IN_DIG;
 		}
 		else if (*i == ' ' || *i == '\n')
 		{
 			if (state == IN_DIG)
-			state = AFTER_DIG;
+				state = AFTER_DIG;
 		}
 		else
 		{
@@ -64,18 +75,23 @@ ull_t get_digit()
 			return 0;
 		}
 	}
+
 	free(line);
 
 	return res;
 }
 
 
+// Создание массива простых множителей числа.
+// Возвращает NULL, если создание не удалось.
 ull_t* factor(ull_t num)
 {
 	ull_t* tmp = NULL;
 	ull_t* res = (ull_t*)malloc(sizeof(ull_t));
+	
 	if (!res)
 		return NULL;
+
 	res[0] = 1;
 
 	ull_t div = 2;
@@ -92,12 +108,12 @@ ull_t* factor(ull_t num)
 				free(res);
 				return NULL;
 			}
+
 			res = tmp;
 			res[cnt-1] = div;
 			num /= div;
 		}
 	} 
-
 
 	tmp = realloc(res, (cnt+2)*sizeof(ull_t));
 	if (!tmp)
@@ -105,14 +121,12 @@ ull_t* factor(ull_t num)
 		free(res);
 		return NULL;
 	}
-	else
-	{
-		res = tmp;
-		if (num != 1)
-			res[cnt++] = num;
-		res[cnt] = 0;
-	}
-
+	
+	res = tmp;
+	if (num != 1)
+		res[cnt++] = num;
+	res[cnt] = 0;
+	
 	return res;
 }
 
@@ -137,7 +151,7 @@ int main()
 	}
 
 	for (int i = 0; result[i]; ++i)
-		printf("%lli ",result[i]);
+		printf("%lli ", result[i]);
 		
 	free(result);	
 	return 0;
