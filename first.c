@@ -1,4 +1,4 @@
-#define _GNU_SOURCE
+//#define _GNU_SOURCE
 
 
 #include <stdio.h>
@@ -23,26 +23,54 @@ typedef unsigned long long ull_t;
 const ull_t PREV_MAX_VAL = (ull_t)1e+18;
 
 
-// Чтение числа из стандартного входа.
-// Возвращает 0, если входные данные не корректны.
-ull_t get_digit()
+size_t add_val(char** line, const char val, size_t* true_size, size_t* size)
 {
-	char* line = NULL;
-	size_t size = 0;
-	ssize_t buff = 0;
-	buff = getline(&line, &size, stdin); 
+	if (*true_size == *size)
+		{
+			char* tmp = (char*)realloc(*line,(2*(*size)+1)*sizeof(char));
+			if (tmp == NULL)
+			{
+				free(*line);
+				return 0;
+			}
 
-	if (line == NULL)
+			*size = 2*(*size)+1;
+			*line = tmp;
+		}
+	(*line)[(*true_size)++] = val;
+	return *size;
+
+}
+
+// Чтение строки из стандартного входа
+size_t readline(char **line)
+{
+	int cur = 0;
+	size_t size=0, true_size=0;
+	while ((cur = getchar()) != EOF)
+	{
+		if (cur == '\n')
+		{
+			break;
+		}
+		if (add_val(line, cur, &true_size, &size) == 0)
+		{
+			return 0;
+		}
+	}
+
+	if (add_val(line, '\0', &true_size, &size) == 0)
 	{
 		return 0;
 	}
 	
-	if (buff == -1)
-	{
-		free(line);
-		return 0;
-	}
+	return true_size;
+}
 
+// Преобразование строки в натуральное число не более 2^63 -1
+// Возвращает 0, если входные данные не корректны.
+ull_t get_digit(char* line)
+{
 	ull_t res = 0;
 	char state = BEFORE_DIG;
 	for (char* i=line; *i; ++i)
@@ -67,7 +95,9 @@ ull_t get_digit()
 		else if (*i == ' ' || *i == '\n')
 		{
 			if (state == IN_DIG)
+			{
 				state = AFTER_DIG;
+			}
 		}
 		else
 		{
@@ -90,8 +120,9 @@ ull_t* factor(ull_t num)
 	ull_t* res = (ull_t*)malloc(sizeof(ull_t));
 	
 	if (!res)
+	{
 		return NULL;
-
+	}
 	res[0] = 1;
 
 	ull_t div = 2;
@@ -99,7 +130,9 @@ ull_t* factor(ull_t num)
 	while (num != 1 && div*div <= num)
 	{
 		if (num % div)
-			++div;
+		{
+				++div;
+		}
 		else
 		{
 			tmp = realloc(res, (++cnt)*sizeof(ull_t));
@@ -124,7 +157,9 @@ ull_t* factor(ull_t num)
 	
 	res = tmp;
 	if (num != 1)
+	{
 		res[cnt++] = num;
+	}
 	res[cnt] = 0;
 	
 	return res;
@@ -133,8 +168,16 @@ ull_t* factor(ull_t num)
 
 int main()
 {
+	char* line = NULL;
+	size_t buf = readline(&line);
+	if (buf == 0)
+	{
+		printf("[error]");
+		return 0;
+	}
+
 	ull_t a;
-	a = get_digit();
+	a = get_digit(line);
 	ull_t* result = NULL;
 	
 	if (!a)
@@ -151,8 +194,9 @@ int main()
 	}
 
 	for (int i = 0; result[i]; ++i)
+	{
 		printf("%lli ", result[i]);
-		
+	}	
 	free(result);	
 	return 0;
 }
