@@ -1,16 +1,12 @@
-//#define _GNU_SOURCE
-
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <limits.h>
-
-
+// Автор Рязанов Максим АПО-13
 /* 
- * Определение простых множителей натурального числа.
+ * Определение и вывод простых множителей натурального числа.
  * Чтение числа происходит из стандартного входа.
  * При некорректных данных выводится [error].
  */
+
+#include <stdio.h>
+#include <stdlib.h>
 
 
 // Флаги состояния при чтении числа
@@ -20,87 +16,144 @@
 
 
 typedef unsigned long long ull_t;
-const ull_t PREV_MAX_VAL = (ull_t)1e+18;
+const ull_t PREV_MAX_VAL = (ull_t)1e+18; // Максимальное допустимое круглое значение
+const ull_t MAX_VAL = (((ull_t)1)<<63)-1; // Максимальное допустимое значение
 
 
-size_t add_val(char** line, const char val, size_t* true_size, size_t* size)
+// Добавление значения в конец массива типа сhar
+// Возвращает новый размер кучи, 0 - если выделение памяти не удалось
+size_t add_char(char** line, const char val, size_t* true_size, size_t* size)
 {
-	if (*true_size == *size)
-		{
-			char* tmp = (char*)realloc(*line,(2*(*size)+1)*sizeof(char));
-			if (tmp == NULL)
-			{
-				free(*line);
+	/*
+	line - изменяемый массив
+	val - добавляемое значение
+	true_size - используемый размер массива
+	size - размер кучи
+	*/
+
+	if (line == NULL) {
+		return 0;
+	}
+
+	// Расширение кучи
+	if (*true_size == *size) {
+			char* tmp = (char*)realloc(*line, (2*(*size)+1)*sizeof(char));
+			if (tmp == NULL) {
+				if (*line != NULL) {
+					free(*line);
+				}
 				return 0;
 			}
 
 			*size = 2*(*size)+1;
 			*line = tmp;
 		}
+
+	// Добавление элемента	
 	(*line)[(*true_size)++] = val;
 	return *size;
-
 }
+
+
+// Добавление значения в конец массива типа unsigned long long
+// Возвращает новый размер кучи, 0 - если выделение памяти не удалось
+size_t add_ull(ull_t** line, const ull_t val, size_t* true_size, size_t* size)
+{
+	/*
+	line - изменяемый массив
+	val - добавляемое значение
+	true_size - используемый размер массиваs
+	size - размер кучи
+	*/
+
+	if (line == NULL) {
+		return 0;
+	}
+
+	//Расширение кучи
+	if (*true_size == *size) {
+			ull_t* tmp = (ull_t*)realloc(*line, (2*(*size)+1)*sizeof(ull_t));
+			if (tmp == NULL) {
+				if (*line != NULL) {
+					free(*line);
+				}
+				return 0;
+			}
+
+			*size = 2*(*size)+1;
+			*line = tmp;
+		}
+
+	// Добавление нового элемента
+	(*line)[(*true_size)++] = val;
+	return *size;
+}
+
 
 // Чтение строки из стандартного входа
 size_t readline(char **line)
 {
+	/*
+	line - результирующая строка
+	cur - текущий считанный символ
+	size - размер кучи
+	true_size - используемый размер массива
+	*/
+
 	int cur = 0;
 	size_t size=0, true_size=0;
-	while ((cur = getchar()) != EOF)
-	{
-		if (cur == '\n')
-		{
+	while ((cur = getchar()) != EOF) {
+		if (cur == '\n') {
 			break;
 		}
-		if (add_val(line, cur, &true_size, &size) == 0)
-		{
+
+		if (add_char(line, cur, &true_size, &size) == 0) {
 			return 0;
 		}
 	}
 
-	if (add_val(line, '\0', &true_size, &size) == 0)
-	{
+	if (add_char(line, '\0', &true_size, &size) == 0) {
 		return 0;
 	}
 	
 	return true_size;
 }
 
+
 // Преобразование строки в натуральное число не более 2^63 -1
 // Возвращает 0, если входные данные не корректны.
-ull_t get_digit(char* line)
+ull_t get_digit(char* line, size_t line_length)
 {
+	/*
+	line - исходная строка
+	res - результирующее число
+	state - положение относительно цифровых символов в строке
+	*/
+
 	ull_t res = 0;
 	char state = BEFORE_DIG;
-	for (char* i=line; *i; ++i)
-	{
-		if (res > LLONG_MAX)
-		{
-			free(line);
-			return 0;
-		}
-
-		if (*i >= '0' && *i <='9' && state)
-		{ 
-			if (res > (ull_t)PREV_MAX_VAL)
-			{
+	for (size_t i=0; i<line_length-1; ++i)	{
+		if (line[i] >= '0' && line[i] <='9' && state != AFTER_DIG) { 
+			if (res > (ull_t)PREV_MAX_VAL) {
 				free(line);
 				return 0;
 			}
 
-			res = res*10 + *i-'0';
+			res = res*10 + line[i]-'0';
 			state = IN_DIG;
-		}
-		else if (*i == ' ' || *i == '\n')
-		{
-			if (state == IN_DIG)
-			{
+		} else if (line[i] == ' ' || line[i] == '\n')	{
+			if (state == IN_DIG) {
 				state = AFTER_DIG;
 			}
 		}
-		else
-		{
+		// Если есть нецифровые символы или второе число
+		else {
+			free(line);
+			return 0;
+		}
+
+		// Проверка переполнения
+		if (res > MAX_VAL) {
 			free(line);
 			return 0;
 		}
@@ -116,51 +169,42 @@ ull_t get_digit(char* line)
 // Возвращает NULL, если создание не удалось.
 ull_t* factor(ull_t num)
 {
-	ull_t* tmp = NULL;
-	ull_t* res = (ull_t*)malloc(sizeof(ull_t));
+	/*
+	num - исходное число
+	size - размер кучи
+	true_size - используемый размер массива
+	res - результирующий массив из множителей
+	div - текущий делитель
+	*/
+
+	size_t size=0, true_size=0;
+	ull_t* res = NULL;
 	
-	if (!res)
-	{
+	if (add_ull(&res, 1, &true_size, &size)==0)	{
 		return NULL;
 	}
-	res[0] = 1;
-
+	
 	ull_t div = 2;
-	size_t cnt = 1;
-	while (num != 1 && div*div <= num)
-	{
-		if (num % div)
-		{
+	while (num != 1 && div*div <= num) {
+		if (num % div) {
 				++div;
-		}
-		else
-		{
-			tmp = realloc(res, (++cnt)*sizeof(ull_t));
-			if (!tmp)
-			{
-				free(res);
+		} else {
+			if (add_ull(&res, div, &true_size, &size)==0) {
 				return NULL;
 			}
-
-			res = tmp;
-			res[cnt-1] = div;
 			num /= div;
 		}
 	} 
-
-	tmp = realloc(res, (cnt+2)*sizeof(ull_t));
-	if (!tmp)
-	{
-		free(res);
-		return NULL;
+	
+	if (num != 1) {
+		if (add_ull(&res, num, &true_size, &size)==0) {
+			return NULL;
+		}
 	}
 	
-	res = tmp;
-	if (num != 1)
-	{
-		res[cnt++] = num;
+	if (add_ull(&res, 0, &true_size, &size)==0)	{
+		return NULL;
 	}
-	res[cnt] = 0;
 	
 	return res;
 }
@@ -168,35 +212,38 @@ ull_t* factor(ull_t num)
 
 int main()
 {
+	/*
+	line - входная строка
+	tmp - рабочая переменная
+	number - исходное число
+	result - массив множителей
+	*/
+
 	char* line = NULL;
-	size_t buf = readline(&line);
-	if (buf == 0)
-	{
+	size_t line_length = readline(&line);
+	if (line_length == 0) {
 		printf("[error]");
 		return 0;
 	}
 
-	ull_t a;
-	a = get_digit(line);
-	ull_t* result = NULL;
+	ull_t number;
+	number = get_digit(line, line_length);
 	
-	if (!a)
-	{
+	if (number == 0) {
 		printf("[error]");
 		return 0;
 	}
 	
-	result = factor(a);
-	if (!result)
-	{
+	ull_t* result = factor(number);
+	if (result == NULL)	{
 		printf("[error]");
 		return 0;
 	}
 
-	for (int i = 0; result[i]; ++i)
-	{
+	for (size_t i = 0; result[i]; ++i)	{
 		printf("%lli ", result[i]);
 	}	
+
 	free(result);	
 	return 0;
 }
