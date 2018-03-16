@@ -1,0 +1,29 @@
+Задача 4
+
+MergeSort
+
+Реализовать сортировку слиянием
+
+// В качестве экземпляра можно лямбду
+
+template<class T, class Compare>
+void mergeSort(T* arr, int l, int r, Compare cmp ) {
+    // ..
+}
+
+int find()
+{
+    //..
+    mergeSort()
+    //...
+}
+
+
+Реклама:
+
+в тетради
+
+Задача №5
+
+Закраска прямой 1.
+
