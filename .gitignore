@@ -1,2 +1,4 @@
 **/Bootstrap/**
 vgcore.*
+*.vscode
+*.out
