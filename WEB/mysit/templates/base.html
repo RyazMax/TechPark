@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>AskMe</title>
+        <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/static/css/askme.css">
+    </head>
+    
+<body>
+     <nav class="navbar navbar-expand-md navbar-light askme-navbg fixed-top">
+      <a class="navbar-brand" href="/">AskMe</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/ask">Ask <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#">Disabled</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+            <div class="dropdown-menu" aria-labelledby="dropdown01">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+          </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+          <input class="form-control mr-sm-2" type="text" placeholder="Question Name" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+        <a class="btn askme-sign" href="/login">Log IN</a>
+        <a class="btn askme-sign" href="/signup">Sign UP</a>
+      </div>
+    </nav>
+   
+    <!-- CONTENT -->
+   <div class="container">
+    <div class="row">
+        <!-- Left column-->
+        <div class="col-8">
+          {% block content %}
+          It's main page
+          {% endblock %}
+        </div>
+        <!-- empty space -->
+        <div class="col-2"></div>
+        <!-- Right column-->
+        <div class="col-2">
+            <div class="row">
+            <h2 class="text-right">Popular tags</h2>
+            </div>
+            <div class="row text-right tags">
+            <div class="col">
+                C++<br>Python<br>C#
+            </div>
+            </div>
+        </div>
+        </div>
+        </div>
+        </div>
+    </div>
+  </div>
+<!-- JS -->
+<script src="../static/js/jquery-3.1.1.slim.min.js"></script>
+<script src="../static/js/bootstrap.min.js"></script>
+
+</body>
+</html>

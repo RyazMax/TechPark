@@ -1,0 +1,28 @@
+body {
+    padding-top: 5rem;
+  }
+  .starter-template {
+    padding: 3rem 1.5rem;
+    text-align: center;
+  }
+
+.askme-navbg
+{
+    background: #FFF273 /*1E0050*/
+}
+.askme-sign
+{
+    background: turquoise;
+    color: white;
+    font-weight: bold;
+    margin: 2px;
+}
+.higher
+{
+    padding-top: 2%;
+}
+div.tags
+{
+    background: darkslategrey;
+    color: wheat;
+}
