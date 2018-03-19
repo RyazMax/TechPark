@@ -15,6 +15,21 @@
 
 using namespace std;
 
+// Определение верхней границы промежутка
+int findUpper(int* array, int size)
+{
+    int pow = 1; // Текущая степень 2-ки
+    while (pow < size) {
+        if (array[pow-1] > array[pow]) {
+            return pow+1;
+        } else {
+            pow *= 2;
+        }
+    }
+
+    return pow<size ? pow : size;
+}
+
 // Поиск индекса m, c помощью бинарного поиска
 // array - исходный массив
 // size - размер массива
@@ -38,18 +53,15 @@ int main()
     int n; // Размер массива
     int* array; // Массив
 
-    assert(cin >> n);
-    assert(n>=MIN_N && n<=MAX_N);
+    cin >> n;
 
-    assert(array = new int [n]);
+    array = new int [n];
     for (int i=0; i<n; ++i) {
-        if (!(cin >> array[i])) {
-            delete[] array;
-            assert(false);
-        }
+        cin >> array[i];
     }
 
-    int ans = findM(array, n); // Ответ
+    int upper = findUpper(array, n); // Верхняя граница
+    int ans = findM(array, upper); // Ответ
     cout << ans;
 
     delete[] array;
