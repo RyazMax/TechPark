@@ -2,4 +2,4 @@
 vgcore.*
 *.vscode
 *.out
-./WEB/mysit/venv/
+/WEB/mysit/venv/*
