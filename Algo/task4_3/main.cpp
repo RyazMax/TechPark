@@ -41,7 +41,7 @@ public:
     size_t GetSize() { return queueSize; }
 
 private:
-    // Размер буффера
+    // Буффер
     int* buff;
     // Размер очереди и буффера
     size_t queueSize, buffSize;
@@ -57,7 +57,7 @@ private:
 // Создание пустой кучи
 CPriorityQueue::CPriorityQueue(size_t size)
 {
-    assert(buff = new int [size]);
+    buff = new int [size];
     buffSize = size;
     queueSize = 0;
 }
@@ -90,15 +90,11 @@ CPriorityQueue::CPriorityQueue(CPriorityQueue&& other)
 {
     buffSize = other.buffSize;
     queueSize = other.queueSize;
-    buff = new int [buffSize];
+    buff = other.buff;
 
-    for (int i = 0; i<queueSize; ++i) {
-        buff[i] = other.buff[i];
-    }
-
-    delete[] other.buff;
-    buffSize = 0;
-    queueSize = 0;
+    other.buff = nullptr;
+    other.buffSize = 0;
+    other.queueSize = 0;
 }
 
 CPriorityQueue::~CPriorityQueue()
@@ -108,6 +104,10 @@ CPriorityQueue::~CPriorityQueue()
 
 CPriorityQueue& CPriorityQueue::operator=(const CPriorityQueue &other)
 {
+    if (buff != nullptr) {
+        delete[] buff;
+    }
+
     buffSize = other.buffSize;
     queueSize = other.queueSize;
     buff = new int [buffSize];
@@ -121,17 +121,17 @@ CPriorityQueue& CPriorityQueue::operator=(const CPriorityQueue &other)
 
 CPriorityQueue& CPriorityQueue::operator=(CPriorityQueue&& other)
 {
-    buffSize = other.buffSize;
-    queueSize = other.queueSize;
-    buff = new int [buffSize];
-
-    for (int i = 0; i<queueSize; ++i) {
-        buff[i] = other.buff[i];
+    if (buff != nullptr) {
+        delete[] buff;
     }
 
-    delete[] other.buff;
-    buffSize = 0;
-    queueSize = 0;
+    buffSize = other.buffSize;
+    queueSize = other.queueSize;
+    buff = other.buff;
+
+    other.buff = nullptr;
+    other.buffSize = 0;
+    other.queueSize = 0;
 
     return *this;
 }
@@ -141,10 +141,7 @@ void CPriorityQueue::Add(int data)
 {
     // Расширить буффер при заполнении
     if (queueSize == buffSize) {
-        if (expandBuff(2*buffSize) == 0) {
-            this->~CPriorityQueue();
-            assert(false);
-        }
+        expandBuff(2*buffSize);
     }
 
     // Добавить элемент, востановить очередь
@@ -156,13 +153,11 @@ void CPriorityQueue::Add(int data)
 int CPriorityQueue::GetMin()
 {
     // Проверка на пустоту
-    if (queueSize == 0) {
-        this->~CPriorityQueue();
-        assert(false);
-    }
+    assert(queueSize);
 
     // Запоминаем результат
     int result = buff[0];
+
     // Добавляем последний элемент в начало, востанавливаем кучу
     buff[0] = buff[--queueSize];
     siftDown(0);
@@ -174,10 +169,7 @@ int CPriorityQueue::GetMin()
 int CPriorityQueue::ReadMin() const
 {
     // Проверка на пустоту
-    if (queueSize == 0) {
-        this->~CPriorityQueue();
-        assert(false);
-    } 
+    assert(queueSize);
 
     return buff[0];
 }
@@ -240,10 +232,6 @@ size_t CPriorityQueue::expandBuff(size_t newSize)
 {
     // Выделяем память
     int* newBuff = new int [newSize];
-    // Если выделение не удалось
-    if (newBuff == nullptr){
-        return 0;
-    }
 
     // Перемещаем данные
     for (int i=0; i < queueSize; ++i) {
@@ -264,7 +252,7 @@ int main()
 {
     // Количество электричек
     int trainsCount = 0;
-    assert(cin >> trainsCount);
+    cin >> trainsCount;
 
     // Минимальное количество тупиков
     int waysCount = 0;
@@ -273,17 +261,8 @@ int main()
     for (int i=0; i<trainsCount; ++i) {
         int arrivalTime = 0, departureTime = 0;
 
-        // Проверка введенных данных
-        if (!(cin >> arrivalTime >> departureTime)) {
-            queue.~CPriorityQueue();
-            assert(false);
-        }
+        cin >> arrivalTime >> departureTime;
 
-        if (arrivalTime < 0 || departureTime < 0) {
-            queue.~CPriorityQueue();
-            assert(false);
-        }
-        
         // Проверить уехала ли саммая "ранняя" электричка, добавить отбытие новой
         if (queue.GetSize() != 0 && queue.ReadMin() < arrivalTime) {
             queue.GetMin();
