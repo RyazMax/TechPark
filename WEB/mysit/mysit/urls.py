@@ -15,15 +15,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls import url
 
-from . import views
+from questions import views
+# from . import views
 
 urlpatterns = [
-    path('', views.showIndex),
-    path('question/', views.showQuestion),
-    path('ask/', views.showAsk),
-    path('login/', views.showLogIn),
-    path('signup/', views.showSignUp),
-    path('admin/', admin.site.urls),
-    path('profile/', views.showProfile)
+    url(r'^$', views.index, name='questions_index'),
+    url(r'^hot/', views.hot, name='questions_hot'),
+    url(r'^login/', views.signin, name='questions_signin'),
+    url(r'^signup/', views.signup, name='questions_signup'),
+    url(r'^question/', views.question, name='questions_question'),
+    url(r'^ask/', views.ask, name='questions_ask'),
+    url(r'^profile', views.profile, name='questions_profile'),
+    url(r'^admin/', admin.site.urls),
 ]
