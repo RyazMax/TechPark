@@ -3,3 +3,4 @@ vgcore.*
 *.vscode
 *.out
 /WEB/mysit/venv/*
+**/__pycache__/**
