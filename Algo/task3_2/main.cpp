@@ -27,8 +27,8 @@ public:
     CDeque(CDeque&& other);
     ~CDeque();
 
-    CDeque& operator = (const CDeque&);
-    CDeque& operator = (CDeque&&);
+    CDeque& operator=(const CDeque&);
+    CDeque& operator=(CDeque&&);
 
     // Добавление элемента в конец
     void PushBack(int data);
@@ -53,7 +53,7 @@ private:
 
 CDeque::CDeque(size_t size)
 {
-    assert(buff = new int [size]);
+    buff = new int [size];
     buffSize = size;
     head = tail = 0;
 }
@@ -75,13 +75,13 @@ CDeque::CDeque(CDeque&& other)
     buffSize = other.buffSize;
     head = other.head;
     tail = other.tail;
-    buff  = new int [buffSize];
+    buff  = other.buff;
 
     for (int i = 0; i<buffSize;++i) {
         buff[i] = other.buff[i];
     }
 
-    delete[] (other.buff);
+    other.buff = nullptr;
     other.buffSize = 0;
     other.head = 0;
     other.tail = 0;
@@ -94,6 +94,9 @@ CDeque::~CDeque()
 
 CDeque& CDeque::operator=(const CDeque &other)
 {
+    if (buff != nullptr) {
+        delete[] buff;
+    }
     buffSize = other.buffSize;
     head = other.head;
     tail = other.tail;
@@ -108,16 +111,15 @@ CDeque& CDeque::operator=(const CDeque &other)
 
 CDeque& CDeque::operator=(CDeque &&other)
 {
+    if (buff != nullptr) {
+        delete[] buff;
+    }
     buffSize = other.buffSize;
     head = other.head;
     tail = other.tail;
-    buff  = new int [buffSize];
+    buff  = other.buff;
 
-    for (int i = 0; i<buffSize;++i) {
-        buff[i] = other.buff[i];
-    }
-
-    delete[] (other.buff);
+    other.buff = nullptr;
     other.buffSize = 0;
     other.head = 0;
     other.tail = 0;
@@ -130,10 +132,7 @@ void CDeque::PushBack(int data)
 {
     // Проверка заполнения буффера
     if ((tail+1)%buffSize == head) {
-        if (expandBuff(2*buffSize) == 0) {
-            this->~CDeque();
-            assert(false);
-        }
+        expandBuff(2*buffSize);
     }
 
     // Добавляем значение
@@ -147,10 +146,7 @@ void CDeque::PushFront(int data)
 {
     // Проверка заполнения буффера
     if ((head - 1 + buffSize)%buffSize == tail) {
-        if (expandBuff(2*buffSize) == 0) {
-            this->~CDeque();
-            assert(false);
-        }
+        expandBuff(2*buffSize);
     }
 
     // Сдвигаем указатель на голову назад
@@ -163,10 +159,7 @@ void CDeque::PushFront(int data)
 int CDeque::PopBack()
 {
     // Проверка дека на пустоту
-    if (isEmpty()) {
-        this->~CDeque();
-        assert(false);
-    }
+    assert(!isEmpty());
 
     // Сдвигаем указатель на хвост назад
     tail = (tail - 1 + buffSize)%buffSize;
@@ -177,10 +170,7 @@ int CDeque::PopBack()
 int CDeque::PopFront()
 {
     // Проверка дека на пустоту
-    if (isEmpty()) {
-        this->~CDeque();
-        assert(false);
-    }
+    assert(!isEmpty());
 
     // Запомимаем то, что нужно вернуть
     int data = buff[head];
@@ -210,7 +200,7 @@ size_t CDeque::expandBuff(size_t newSize)
     buffSize = newSize;
 
     // Удаляем старый буффер
-    if (buff !=0) {
+    if (buff != nullptr) {
         delete[] buff;
     }
     buff = newBuff;
@@ -222,18 +212,14 @@ int main()
 {
     // Число комманд
     int cmdCount = 0;
-    assert(cin >> cmdCount);
-    assert(cmdCount >= 0);
+    cin >> cmdCount;
 
     CDeque deque;
     for (int i=0; i<cmdCount; ++i) {
         int command = 0;
         int value = 0;
 
-        if (!(cin >> command >> value)) {
-            deque.~CDeque();
-            assert(false);
-        }
+        cin >> command >> value;
 
         switch(command) {
             case 1:
@@ -257,14 +243,9 @@ int main()
                         cout<<"NO";
                         return 0;
                     } 
-                break;
-            default:
-                deque.~CDeque();
-                assert(false);
-                
+                break;    
         }
     }
     cout << "YES";
-    // Убрать проверки
     return 0;
 }
