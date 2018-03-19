@@ -1,14 +1,28 @@
 body {
     padding-top: 5rem;
   }
-  .starter-template {
+
+.starter-template {
     padding: 3rem 1.5rem;
     text-align: center;
   }
+/* Блок вопроса на главной странице*/
+.askme-questionblock
+{
+    background: #d8a95f;
+    padding: 5px;
+    color: black;
+}
+.askme-useravatar
+{
+    width: 64px;
+    height: 64px;
+    margin-top: 10px;
+}
 
 .askme-navbg
 {
-    background: #FFF273 /*1E0050*/
+    background: #29477F; /*1E0050*/
 }
 .askme-sign
 {
@@ -17,9 +31,10 @@ body {
     font-weight: bold;
     margin: 2px;
 }
-.higher
+.askme-higher
 {
-    padding-top: 2%;
+    margin-top: 4%;
+    margin-bottom: 4%;
 }
 div.tags
 {

@@ -3,7 +3,7 @@ from django.shortcuts import render
 
 # Главная страница со списком вопросов
 def showIndex(request):
-    return render(request, 'index.html')
+    return render(request, 'index.html', {'questions':list(range(5))})
 
 # Страница с одним вопросом
 def showQuestion(request):
@@ -20,3 +20,7 @@ def showLogIn(request):
 # Страница регистрации
 def showSignUp(request):
     return render(request, 'signup.html')
+
+# Cтраница профиля
+def showProfile(request):
+    return render(request, 'profile.html')

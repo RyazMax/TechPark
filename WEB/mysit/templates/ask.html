@@ -1,7 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="col">
-<h1>Ask New question Please</h1>
+<h3>New Quetion</h3>
+<div class="askme-higher">
+    <form action="#">
+        <div class = "askme-higher">
+        <h5>Title</h5>
+        <input type="text" name="Title">
+        </div>
+        <div class = "askme-higher">
+        <h5>Text</h5>
+        <input type="text" name="Text">
+        </div>
+        <div class = "askme-higher">
+        <h5>Tags</h5>
+        <input type="text" name="Tags">
+        </div>
+        <button type="submit" class="askme-sign btn" name="ASK!">ASK!</button>
+    </form>
 </div>
 {% endblock content %}
