@@ -30,12 +30,74 @@
 #include <iostream>
 #include <ctime>
 
+// Стандартный функтор "меньше"
+template <class T>
+bool isLessDefault(const T& left, const T& right)
+{
+    return left<right;
+}
+
+// Разделеение элементов массива относительно выбранного pivot
+// Выбор pivot случайный
+template <class T, class Compare>
+int partition(T* arr, int left, int right, const Compare& functor)
+{
+    int pivot = rand()%(right-left) + left;
+    std::swap(arr[pivot], arr[left]);
+    // Указатель на первый элемент меньший выбранного
+    int i = right-1;
+    // Указатель на первый непроверенный элемент
+    int j = right-1;
+
+    while (j > left) {
+        if (functor(arr[j], arr[left])) {
+            --j;
+        } else {
+            std::swap(arr[i--], arr[j--]);
+        }
+    }
+
+    std::swap(arr[left], arr[i]);
+    return i;
+}
+
+// Вычисление порядковой статистики pos
+template <class T, class Compare>
+int orderStatistic(T* arr, int size, int pos, const Compare& functor)
+{
+    int pivot = 0; // Выбранный элемент
+    int left = 0; // Левая граница диапозона
+    int right = size; // Правая граница диапозона
+    do {
+        pivot = partition(arr, left, right, functor);
+        if (pivot > pos) {
+            right = pivot;
+        } else {
+            left = pivot + 1;
+        }
+    } while (pivot != pos);
+
+    return pivot;
+}
+
 int main()
 {
     srand(time(0));
-    int size = 0;
+    int size = 0; // Размер массива
+    int pos = 0; // Номер порядковой статистики
+
     std::cin>>size;
-    std::cout<<rand() % size;
-    std::cout<<rand() % size;
+    std::cin>>pos;
+
+    int* arr = new int[size]; // Массив
+
+    for (int i = 0; i<size; ++i) {
+        std::cin>>arr[i];
+    }
+
+    pos = orderStatistic(arr, size, pos, isLessDefault<int>);
+    std::cout<<arr[pos];
+
+    delete[] arr;
     return 0;
 }
