@@ -15,18 +15,21 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.conf.urls import url
+from django.conf import settings
+from django.conf.urls.static import static
 
 from questions import views
 # from . import views
 
 urlpatterns = [
-    url(r'^$', views.index, name='questions_index'),
-    url(r'^hot/', views.hot, name='questions_hot'),
-    url(r'^login/', views.signin, name='questions_signin'),
-    url(r'^signup/', views.signup, name='questions_signup'),
-    url(r'^question/', views.question, name='questions_question'),
-    url(r'^ask/', views.ask, name='questions_ask'),
-    url(r'^profile', views.profile, name='questions_profile'),
-    url(r'^admin/', admin.site.urls),
-]
+    path('',views.index, name='questions_index'),
+    path('hot/', views.hot, name='questions_hot'),
+    path('tags/<str:tag_name>', views.withTag, name="questions_withtag"),
+    path('login/', views.signin, name='questions_signin'),
+    path('logout/', views.logout, name='questions_logout'),
+    path('signup/', views.signup, name='questions_signup'),
+    path('question/<int:question_id>', views.question, name='questions_question'),
+    path('ask/', views.ask, name='questions_ask'),
+    path('profile', views.profile, name='questions_profile'),
+    path('admin/', admin.site.urls),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

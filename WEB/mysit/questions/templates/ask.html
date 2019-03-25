@@ -1,21 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h3>New Quetion</h3>
-<div class="askme-higher">
-    <form action="#">
-        <div class = "askme-higher">
-        <h5>Title</h5>
-        <input type="text" name="Title">
-        </div>
-        <div class = "askme-higher">
-        <h5>Text</h5>
-        <input type="text" name="Text">
-        </div>
+<h3>New Question</h3>
+<div class="askme-higher askme-questionblock">
+    <form method="POST">
+        {% csrf_token %}
+        {% for f in form.visible_fields %}
+            <div class="form-group">
+                <label for="title">{{ f.label }} </label>
+                {{f.as_widget}}
+            </div>
+        {% endfor %}
+        
+        <!--      
         <div class = "askme-higher">
         <h5>Tags</h5>
-        <input type="text" name="Tags">
-        </div>
+        <input type="text" name="Tags" class="form-control" id="tags_gap"><br>
+        <small for="tags_gap" class="text-muted">Put space between tags</small>
+        </div>-->
+        
         <button type="submit" class="askme-sign btn" name="ASK!">ASK!</button>
     </form>
 </div>

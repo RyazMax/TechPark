@@ -1,41 +1,30 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
-<div class = "col-4">
-    <h3>USER_NAME</h3>
-    <form action="#">
-        <div class = "row askme-higher">
-        <div class = "col-3">
-            <h5>Login</h5>
-        </div>
-        <div class = "col">
-            <input type="text" placeholder="user_login">
-        </div>
-        </div>
+    <div class="col">
+    <h3>{{user.username}}</h3>
+    <form class="askme-higher" enctype="multipart/form-data" method="POST">
+    {% csrf_token %}
+    <div class="row">
+    <div class="col-5">
+    <div class="form-group">
+    <label for="title">{{form.login.label}}</label>
+    {{ form.login.as_widget }}
+    </div>
+    <div class="form-group">
+    <label for="title">{{form.email.label}}</label>
+    {{ form.email.as_widget }}
+    </div>
+    <button class="btn askme-sign" type="submit">Save</button>
+    </div>
+    <div class="col-2"></div>
+    <div class="col">
+    <img src="{{ MEDIA_URL }}{{user.profile.avatar.url}}" class="askme-useravatar-big rounded">
+    {{form.avatar.as_widget}}
+    </div>
+    </div>
 
-        <div class = "row askme-higher">
-            <div class = "col-3">
-                <h5>Email</h5>
-            </div>
-            <div class = "col">
-                <input type="text" placeholder="user_email">
-            </div>
-        </div>
-
-        <div class = "row askme-higher">
-            <div class = "col-3">
-                <h5>NickName</h5>
-            </div>
-            <div class = "col">
-                <input type="text" placeholder="user_nickname">
-            </div>
-        </div>
-
-        <div class = "row askme-higher">
-            <img src="/static/img/test.jpg" class="askme-useravatar">
-        </div>
-
-        <button class="btn askme-sign" type="submit">Save</button>
     </form>
-</div>
+    </div>
 {% endblock content %}

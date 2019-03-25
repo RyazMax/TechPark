@@ -1,0 +1,4 @@
+Для создания пользователя ./manage.py createuser/ createsuperuser
+для проверки: в dbshell select * from auth_user
+
+Потом в askme/admin заходим и там можно добавлять записи в базу данных

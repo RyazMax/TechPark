@@ -25,7 +25,7 @@ SECRET_KEY = 'm#&ws!n%)v60^&5g7g^bpvrr@e=i20c3aolpje^c=q956$&yj8'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['ask.me', '127.0.0.1']
 
 
 # Application definition
@@ -56,7 +56,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': ['./templates',
-                'templates',
+                
                 'questions/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -125,3 +125,6 @@ STATIC_ROOT = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'questions/static'),
 ]
+
+MEDIA_ROOT = BASE_DIR
+MEDIA_URL = '/questions/'

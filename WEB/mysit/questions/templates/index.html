@@ -2,21 +2,22 @@
 
 {% block content %}
 
-<h3>NewQuestions</h3>
-<div class="askme-higher">
-{% for i in questions %}
-<div class="media askme-questionblock askme-higher">
-    <img class="mr-3 askme-useravatar rounded" src="/static/img/test.jpg">
-    <div class="media-body">
-    <h5>How to build MoonPark </h5> 
-    <p class>
-            {{i}}Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer et mollis neque. Nulla in accumsan sem, vitae pretium risus. Quisque finibus posuere dictum. Vestibulum egestas arcu nec eros volutpat vestibulum. Nulla placerat dui vitae mauris hendrerit accumsan. Curabitur tristique nisl vel fringilla pulvinar. Donec interdum sodales lacus, eget mattis eros egestas gravida. In ligula nunc, ultrices fringilla eleifend eu, consequat non diam. 
-    <a class="active" href='/question'>CLICK</a>
-    </p>
+<div class="row">
+    <div class="col-4"><h3>{{title}}</h3></div>
+    <div class="col-4"><a href= {% if title == "New questions" %}
+        "{% url 'questions_hot' %}"
+        {% else %}
+        "{% url 'questions_index' %}"
+        {%endif%}>
+        <h4>{{subTitle}}</h4></a>
     </div>
-</div>
+</div> 
+<div class="askme-higher">
+{% for question in questions %}
+{% include "one-question.html"%}
 {% endfor %}
 </div>
+{% include "paginator.html" with objects=questions %}
 {% endblock %}
 
 {% block js %}

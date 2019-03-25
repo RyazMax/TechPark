@@ -1,0 +1,44 @@
+{% load static %}
+
+<div class="media askme-questionblock askme-higher rounded">
+    <div class = "col-2">
+    
+    <div class = "row justify-content-center">
+        {% if question.author.user.profile.avatar %}
+        <img class="align-right mr-3 ml-2 askme-useravatar rounded" src="{{MEDIA_URL}}{{question.author.user.profile.avatar.url}}">
+        {% else %}
+        <img class="align-right mr-3 ml-2 askme-useravatar rounded" src="{% static  'img/test.jpg'%}">
+        {% endif %}
+    </div>
+
+    <div class = "col mt-2 justify-content-center">
+        {{question.author.user.username}}
+    </div>
+
+    <div class = "mt-3  row askme-higher">
+        <a href="#" class="rounded-left btn-danger askme-likebutton">&#9668;</a>
+            <div class="form-control askme-likescounter">
+                {{question.rating}}
+            </div>
+        <a href="#" class="rounded-right btn-success askme-likebutton">&#9658;</a>
+    </div>
+    </div>
+
+    <div class="media-body ml-3">
+    <h5><a href="{% url 'questions_question' question.id%}">{{question.title}}</a></h5> 
+    <p>
+            {{question.text |truncatechars:140}} 
+    </p>
+    <div class="row askme-higher">
+        <div class="col-2">
+            <a href="{% url 'questions_question' question.id %}">answer({{question.answer_set.count}})</a>
+        </div>
+        <div class="row ml-5">
+        Tags:&nbsp;&nbsp;
+        {% for tag in question.tags.all %}
+        <a href="{% url 'questions_withtag' tag %}">{{tag}}</a>&nbsp;&nbsp;
+        {% endfor %}
+        </div>
+    </div>
+    </div>
+</div>

@@ -6,10 +6,11 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "g++ -o task2_2/main task2_2/main.1.cpp",
-            //"args": [
-              //  "-o main main.cpp"
-           // ]
+            "command": "g++ -o task_2_4_2/main.out task_2_4_2/main.cpp",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }

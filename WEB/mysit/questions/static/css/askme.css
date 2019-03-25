@@ -9,35 +9,128 @@ body {
 /* Блок вопроса на главной странице*/
 .askme-questionblock
 {
-    background: #d8a95f;
+    background: #EFAF86;
     padding: 5px;
+    border: 3px solid black;
     color: black;
 }
 .askme-useravatar
 {
-    width: 64px;
-    height: 64px;
+    width: 72px;
+    height: 72px;
     margin-top: 10px;
+}
+
+.askme-useravatar-big
+{
+    width: 200px;
+    height: 200px;
+}
+
+.askme-useravatar-mini
+{
+    width: 36px;
+    height: 36px;
 }
 
 .askme-navbg
 {
-    background: #29477F; /*1E0050*/
+    background: #29477F; /*1E0050*/;
+}
+
+.askme-navbar-label 
+{
+    color: white;
+    font-weight: bold;
+    margin-left: 2px;
+    margin-right: 6px;
+    
+}
+a.askme-navbar-label:hover
+{
+    color: gold;
 }
 .askme-sign
 {
     background: turquoise;
     color: white;
     font-weight: bold;
-    margin: 2px;
+    margin: 4px;
 }
 .askme-higher
 {
-    margin-top: 4%;
-    margin-bottom: 4%;
+    margin-top: 20px;
+    margin-bottom: 30px;
 }
-div.tags
+
+.askme-listblock
 {
-    background: darkslategrey;
-    color: wheat;
+    background: #EFAF86;
+    padding: 5px;
+    border: 3px solid black;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 14pt;
+}
+
+.askme-listblock a
+{
+    color: steelblue;
+}
+
+.askme-logofont
+{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.askme-likebutton
+{
+    width: 32px;
+    height: 32px;
+    margin: 2px;
+    padding: 4px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+a.askme-likebutton:hover
+{
+    text-decoration: none;
+}
+
+.askme-wrong
+{
+    color:red;
+}
+
+.askme-textarea
+{
+    width: 100%;
+    height: 200px;
+}
+
+.askme-likescounter
+{
+    width:44px;
+    height:32px;
+    font-size: 12pt;
+    margin: 2px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.askme-container
+{
+    padding-left: 50px;
+    padding-right: 15px;
+}
+
+hr
+{
+    margin-top: 30px;
+    margin-bottom: 30px;
+    border: none; 
+    color: gray; 
+    background-color: gray; 
+    height: 2px; 
 }
